@@ -1,3 +1,10 @@
+FAIRE LES MODIFICATION DANS FICHIER connect.php
+
+$host = "gestion-mysql8"; pour la version 8.3
+$host = "gestion-produits-mysql"; pour la version sql5.7 et php5
+
+COMMANDS DOCKERS:
+
 docker network create pont
 
 docker build -t gestion-produits-php .
