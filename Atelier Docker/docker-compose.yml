@@ -1,21 +1,19 @@
 version: '3.8'
 
 services:
-  gestion-produits-mysql:  
-    build:
-      context: .
-      dockerfile: DockerfileSql
-    container_name: compose-mysql
-    image: gestion-produits-mysql
+  gestion-produits-postgres:
+    image: postgres:latest
+    container_name: compose-postgres
     networks:
       - pont
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: gestion_produits
+      POSTGRES_DB: gestion_produits
+      POSTGRES_USER: postgres_user
+      POSTGRES_PASSWORD: postgres_password
     ports:
-      - "3306:3306"  
+      - "5432:5432"
 
-  gestion-produits-php:  
+  gestion-produits-php:
     build:
       context: .
       dockerfile: DockerfilePHP
@@ -24,10 +22,10 @@ services:
     networks:
       - pont
     ports:
-      - "8080:80"  
+      - "8080:80"
     depends_on:
-      - gestion-produits-mysql  
+      - gestion-produits-postgres
 
 networks:
-  pont:  
+  pont:
     driver: bridge
