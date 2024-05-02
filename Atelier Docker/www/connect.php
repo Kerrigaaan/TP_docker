@@ -1,9 +1,15 @@
 <?php
-    $host = "gestion-mysql8";
+    $host = "postgres";
+    $dbname = "gestion_produits";
     $username = "root";
     $password = "root";
-    $db = "gestion_produits";
 
-    $link = mysqli_connect($host,$username,$password,$db) or die ("Erreur de connexion à la base de données.");
-    mysqli_set_charset($link,"utf8");
+    try {
+        $pdo = new PDO("pgsql:host=$host;dbname=$dbname", $username, $password);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo->exec("SET NAMES utf8");
+
+    } catch (PDOException $e) {
+        die("Erreur de connexion à la base de données: " . $e->getMessage());
+    }
 ?>

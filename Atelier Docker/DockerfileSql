@@ -1,9 +1,0 @@
-# Utilisez l'image MySQL officielle
-FROM mysql:5.7
-
-ENV MYSQL_ROOT_PASSWORD=root
-
-# Copiez le dump SQL dans le conteneur et initialisez la base de données
-COPY database/gestion_produits.sql /docker-entrypoint-initdb.d/
-
-EXPOSE 3306
