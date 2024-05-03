@@ -1,34 +1,30 @@
 <?php
-    if (isset($_POST['US_login']) && isset($_POST['US_password'])) {
+    if (isset($_POST['US_login']) and isset($_POST['US_password'])) {
         session_start();
         include 'connect.php';
 
-        $US_login = htmlspecialchars($_POST['US_login']);
-        $US_password = htmlspecialchars($_POST['US_password']);
+        ini_set('display_errors', '1');
 
-        try {
-            
-            $sql = "SELECT * FROM utilisateurs WHERE US_login = :login AND US_password = :password";
-            $stmt = $pdo->prepare($sql);
-            $stmt->bindParam(':login', $US_login);
-            $stmt->bindParam(':password', hash('sha256', $US_password)); // Utilisation de la fonction de hachage SHA256
+        $US_login = pg_escape_string($link,$_POST['US_login']);
+        $US_password = pg_escape_string($link,$_POST['US_password']);
 
-            $stmt->execute();
+        $hashed_password = hash('sha256', $US_password);
 
-            
-            if ($stmt->rowCount() > 0) {
-                $utilisateur = $stmt->fetch(PDO::FETCH_ASSOC);
-                $_SESSION['login'] = $utilisateur['US_login'];
+        $query = "SELECT * FROM utilisateurs WHERE US_login = $1 AND US_password = $2";
+        $result = pg_prepare($link, "login_query", $query);
+
+        $res = pg_execute($link, "login_query", array($US_login, $hashed_password));
+        if ($res != false) {
+            if (pg_num_rows($res) > 0) {
+                // Utilisateur trouvé dans la base
+                $utilisateur = pg_fetch_assoc($res);
+                $_SESSION['login'] = $utilisateur['us_login'];
                 header("Location: home.php");
-                exit;
             } else {
                 header("Location: index.php");
-                exit;
             }
-        } catch (PDOException $e) {
-           
+        } else {
             header("Location: BADUSER.html");
-            exit;
         }
     }
 ?>

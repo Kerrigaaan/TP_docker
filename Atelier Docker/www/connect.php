@@ -1,14 +1,15 @@
 <?php
-    $host = "postgres";
+    $host = "compose-postgres";
     $dbname = "gestion_produits";
-    $username = "root";
-    $password = "root";
+    $username = "postgres_user";
+    $password = "postgres_password";
+    $port = 5432; 
 
     try {
-        $pdo = new PDO("pgsql:host=$host;dbname=$dbname", $username, $password);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $pdo->exec("SET NAMES utf8");
-
+        $dsn = "pgsql:host=$host;port=$port;dbname=$db;";
+        $conn = new PDO($dsn, $username, $password);
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        echo "Connected successfully";
     } catch (PDOException $e) {
         die("Erreur de connexion à la base de données: " . $e->getMessage());
     }

@@ -1,10 +1,8 @@
 FROM postgres:latest
 
 # Définir des variables d'environnement pour PostgreSQL
-ENV POSTGRES_DB=mydatabase \ POSTGRES_USER=myuser \ POSTGRES_PASSWORD=mypassword
-
 # Copier des fichiers SQL d'initialisation (facultatif)
-# COPY init.sql /docker-entrypoint-initdb.d/
+COPY ./database/gestion_produits.sql /docker-entrypoint-initdb.d/
 
 EXPOSE 5432
 

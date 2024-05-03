@@ -2,7 +2,9 @@ version: '3.8'
 
 services:
   gestion-produits-postgres:
-    image: postgres:latest
+    build:
+      context: .
+      dockerfile: DockerfilePost
     container_name: compose-postgres
     networks:
       - pont
@@ -16,7 +18,7 @@ services:
   gestion-produits-php:
     build:
       context: .
-      dockerfile: DockerfilePHP
+      dockerfile: Dockerfile
     container_name: compose-php
     image: gestion-produits-php
     networks:
